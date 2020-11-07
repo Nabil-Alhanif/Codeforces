@@ -1,0 +1,13 @@
+#include <bits/stdc++.h>
+using namespace std;
+int main()
+{
+	int k,n,x,ans=0;
+	cin>>n>>k>>x;
+	int ar[n];
+	for (int i=0;i<n;i++)cin>>ar[i];
+	sort(ar,ar+n);
+	for (int i=0;i<n-k;i++)ans+=ar[i];
+	ans+=k*x;
+	cout<<ans<<"\n";
+}
