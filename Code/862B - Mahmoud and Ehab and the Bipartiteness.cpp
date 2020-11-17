@@ -14,11 +14,9 @@ int main()
     {
         ll a,b;
         cin>>a>>b;
-        //antri[i-1]={min(a,b),max(a,b)};
         graph[a].push_back(b);
         graph[b].push_back(a);
     }
-    //sort(antri.begin(),antri.end());
     stack<pair<ll,ll>>q;
     q.push({1,1});
     group[0].insert(1);
