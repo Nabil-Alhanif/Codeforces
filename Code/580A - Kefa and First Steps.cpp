@@ -2,17 +2,17 @@
 using namespace std;
 
 int main() {
-	ios_base::sync_with_stdio(0);
+	ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
 	int n;
 	cin >> n;
 	int longPath=0, endPath=0, last=0;
-	for (int i = 0; i < n; i++) {
+	for (int i = 0; i < n; i++)
+	{
 		int tmp;
 		cin >> tmp;
 		if (tmp>=last)endPath++;
-		else {
+		else
 			endPath=1;
-		}
 		longPath=max(longPath, endPath);
 		last=tmp;
 	}
