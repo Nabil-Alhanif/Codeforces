@@ -1,24 +1,62 @@
 #include <bits/stdc++.h>
 using namespace std;
 typedef long long ll;
-const ll mod = 1e9+7, inf = 1e13;
+ll INF = 1e13, MOD = 1e9+7;
+
+int ans = 0;
+map<vector<int>, int>ans2;
+
+void rek(int i, int pos)
+{
+    cout << i << " " << pos << "\n";
+    if (i<=9 && pos==7)
+    {
+        ans++;
+        return;
+    }
+    for (int j=i+1; j<=9; j++)
+        rek(j, pos+1);
+}
+
+bool pal(string s)
+{
+    int size = s.size();
+    for (int i=0, j=size-1; i<=j; i++, j--)
+        if (s[i] != s[j])
+            return false;
+    return true;
+}
+
+void cek(vector<int>v, int jum)
+{
+  if (jum==4)
+  {
+    for (int i=0; i<4; i++)
+    {
+      if (v[i]==i)
+        return;
+    }
+    ans++;
+    ans2[v]++;
+    return;
+  }
+  for (int i=0; i<4; i++)
+  {
+    vector<int> v2 = v;
+    if (i!=jum && v[i]==-1)
+    {
+      v2[i]=jum;
+      cek(v2, jum+1);
+    }
+  }
+}
 
 int main()
 {
-    ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
-    vector<int>fib(500);
-    fib[0] = 1;
-    fib[1] = 1;
-    for (int i=2; i<500; i++)
-        fib[i] = fib[i-1] + fib[i-2];
-    int n;
-    cin >> n;
-    string name = string(n, 'o');
-    for (auto i:fib)
-    {
-        if (i>n)
-            break;
-        name[i-1] = 'O';
-    }
-    cout << name << "\n";
+  for (int i=0;i<=20;i++)
+  {
+    if (i*30+(20-i)*20<=500)
+      ans = max(ans, i*5+(20-i)*3);
+  }
+  cout << ans << "\n";
 }
