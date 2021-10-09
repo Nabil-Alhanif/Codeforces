@@ -1,0 +1,148 @@
+#include <bits/stdc++.h>
+#include <ext/pb_ds/assoc_container.hpp>
+
+using namespace std;
+using namespace __gnu_pbds;
+
+typedef tree<int, null_type, less<int>, rb_tree_tag,
+            tree_order_statistics_node_update> indexed_set;
+
+typedef int_fast64_t ll;
+const ll MOD = 1e9 + 7, INF = 1e18;
+const double PI = acos(-1);
+
+template <class type>
+inline void printVect2D(vector<vector<type>> &vect)
+{
+    for (auto i:vect) {
+        for (auto j:i)
+            cout << j << " ";
+        cout << "\n";
+    }
+    cout << "\n";
+}
+
+inline void sieve(vector<bool> &vect, bool is_one_prime)
+{
+    vect[0] = 1;
+    if (!is_one_prime)
+        vect[1] = 1;
+
+    ll lim = vect.size() - 1;
+ 
+    for (ll i = 2; i * i <= lim; i++) {
+        if (!vect[i]) {
+            for (ll j = i * i; j <= lim; j += i)
+                vect[j] = 1;
+        }
+    }
+}
+
+inline vector<int> sieve(vector<bool> &vect)
+{
+    vector<int> ret;
+
+    ll size = vect.size();
+    for (ll i = 0; i <= size; i++) {
+        if (!vect[i])
+            ret.push_back(i);
+    }
+
+    return ret;
+}
+
+
+/* Question specific function and variable */
+
+/* Note to self
+ *
+ * - Don't use a data structure when you don't need to
+ */
+
+void debug(vector<pair<pair<char, int>, pair<int, int>>> cbs)
+{
+    cout << "\n";
+    for (auto i:cbs)
+        cout << i.first.second << " ";
+    cout << "\n";
+
+    for (auto i:cbs)
+        cout << i.second.first<< " ";
+    cout << "\n";
+
+    for (auto i:cbs)
+        cout << i.second.second << " ";
+    cout << "\n\n";
+}
+
+void printCbs(vector<pair<pair<char, int>, pair<int, int>>> cbs, int first_valid)
+{
+    while (first_valid != cbs.size() - 1) {
+        cout << cbs[first_valid].first.first;
+        first_valid = cbs[first_valid].second.second;
+    }
+    cout << "\n";
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+
+    int n, m, p, l, r, tmp, first_valid = 1;
+    char ctmp, query;
+
+    cin >> n >> m >> p;
+
+    // bracket, pair, next_left, next_right
+    vector<pair<pair<char, int>, pair<int, int>>> cbs(n + 2);
+
+    stack<int> s;
+    for (int i = 1; i <= n; i++) {
+        cin >> ctmp;
+
+        cbs[i].first.first = ctmp;
+        cbs[i].second.first = i - 1;
+        cbs[i].second.second = i + 1;
+
+        if (ctmp == '(')
+            s.push(i);
+        else {
+            tmp = s.top();
+            s.pop();
+            cbs[i].first.second = tmp;
+            cbs[tmp].first.second = i;
+        }
+    }
+
+    while (m--) {
+        cin >> query;
+        if (query == 'R')
+            p = cbs[p].second.second;
+        else if (query == 'L')
+            p = cbs[p].second.first;
+        else {
+            l = cbs[p].first.second;
+            r = p;
+
+            if (l > r)
+                swap(l, r);
+            //cout << "DEL " << l << " " << r << "\n";
+
+            cbs[cbs[l].second.first].second.second = cbs[r].second.second;
+            cbs[cbs[r].second.second].second.first = cbs[l].second.first;
+
+            if (l == first_valid)
+                first_valid = cbs[r].second.second;
+            p = cbs[r].second.second;
+            if (p == n + 1)
+                p = cbs[p].second.first;
+        }
+
+        /*
+        cout << "p: " << p << " first_valid: " << first_valid;
+        debug(cbs);
+        printCbs(cbs, first_valid);
+        */
+    }
+    printCbs(cbs, first_valid);
+}

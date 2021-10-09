@@ -12,7 +12,6 @@ private:
     vector<vector<int>>adjList;
     vector<int>parent;
     vector<int>color;
-    vector<pair<int, int>> extras; // If the user try to connect already connected nodes, the data will be stored here
 
 public:
     DSU(int n)
@@ -46,15 +45,8 @@ public:
         return ret;
     }
 
-    inline vector<pair<int, int>> getExtras()
-    {
-        return extras;
-    }
-
     inline void combine(int a, int b)
     {
-        int ta = a, tb = b;
-
         adjList[a].push_back(b);
         adjList[b].push_back(a);
         a = findSet(a);
@@ -72,6 +64,51 @@ public:
                 child[a].push_back(cur);
             }
         }
-        else extras.push_back({ta, tb});
     }
 };
+
+inline void sieve(vector<bool> &vect, int lim = 1e6)
+{
+    vect[0] = 1;
+    vect[1] = 1;
+
+    for (int i = 2; i * i <= lim; i++)
+    {
+        for (int j = i * i; j <= lim; j += i)
+            vect[j] = 1;
+    }
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+
+    int t, n, tmp;
+    cin >> t;
+
+    while (t--)
+    {
+        cin >> n;
+
+        set<int> s;
+        map<int, int> m;
+
+        for (int i = 0; i < n; i++)
+        {
+            cin >> tmp;
+            s.insert(tmp);
+            m[tmp]++;
+        }
+
+        for (auto i:s)
+            cout << i << " ";
+
+        for (auto i:m)
+        {
+            for (int j = 1; j < i.second; j++)
+                cout << i.first << " ";
+        }
+
+        cout << "\n";
+    }
+}
