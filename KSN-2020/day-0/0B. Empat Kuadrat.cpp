@@ -6,9 +6,6 @@
 #define P10_UINT64 10000000000000000000ULL   /* 19 zeroes */
 #define E10_UINT64 19
 
-#define fi first
-#define se second
-
 using namespace std;
 using namespace __gnu_pbds;
 
@@ -87,6 +84,7 @@ static void print_u128_u(u128_t u128)
 }
 
 
+
 /* Question specific function and variable */
 
 /* Note to self
@@ -98,6 +96,27 @@ int main()
 {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    int n, m, k;
-    cin >> n >> m >> k;
+    ll n, aa, bb, cc, dd, i, j, k, l, dif = INF, ana, anb, anc, adn, tmp;
+    cin >> n;
+
+    aa = sqrt(n);
+    for (aa, j = 0; (aa >= 0) && (j < 100); aa--, j++) {
+        bb = sqrt((n - (aa * aa)));
+        for (bb, i = 0; (bb >= 0) && (i < 100); bb--, i++) {
+            cc = sqrt((n - (aa * aa) - (bb * bb)));
+            for (cc, k = 0; (cc >= 0) && (k < 100); cc--, k++) {
+                dd = sqrt((n - (aa * aa) - (bb * bb) - (cc * cc)));
+
+                tmp = (n - (aa * aa) - (bb * bb) - (cc * cc) - (dd * dd));
+                if (tmp < dif) {
+                    dif = tmp;
+                    ana = aa;
+                    anb = bb;
+                    anc = cc;
+                    adn = dd;
+                }
+            }
+        }
+    }
+    cout << ana << " " << anb << " " << anc << " " << adn << "\n";
 }

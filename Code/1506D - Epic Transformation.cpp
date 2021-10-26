@@ -1,13 +1,10 @@
 #include <bits/stdc++.h>
 
 #include <ext/pb_ds/assoc_container.hpp>
-#include <ext/pb_ds/tree_policy.hpp>
+#include <ext/pb_ds//tree_policy.hpp>
 
 #define P10_UINT64 10000000000000000000ULL   /* 19 zeroes */
 #define E10_UINT64 19
-
-#define fi first
-#define se second
 
 using namespace std;
 using namespace __gnu_pbds;
@@ -22,16 +19,8 @@ typedef __int128_t i128_t;
 const ll MOD = 1e9 + 7, INF = 1e18;
 const double PI = acos(-1);
 
-template <class T>
-inline T ceil(T a, T b) // Get ceil of a / b
-{
-    if (b > 0)
-        return ((a + b - 1) / b);
-    return 0;
-}
-
-template <class T>
-inline void printVect2D(vector<vector<T>> &vect)
+template <class type>
+inline void printVect2D(vector<vector<type>> &vect)
 {
     for (auto i:vect) {
         for (auto j:i)
@@ -47,9 +36,9 @@ inline void sieve(vector<bool> &vect, bool is_one_prime)
     if (!is_one_prime)
         vect[1] = 1;
 
-    int_fast32_t lim = vect.size() - 1;
+    ll lim = vect.size() - 1;
  
-    for (int_fast32_t i = 2; i * i <= lim; i++) {
+    for (ll i = 2; i * i <= lim; i++) {
         if (!vect[i]) {
             for (ll j = i * i; j <= lim; j += i)
                 vect[j] = 1;
@@ -61,8 +50,8 @@ inline vector<int> sieve(vector<bool> &vect)
 {
     vector<int> ret;
 
-    int_fast32_t size = vect.size();
-    for (int_fast32_t i = 0; i <= size; i++) {
+    ll size = vect.size();
+    for (ll i = 0; i <= size; i++) {
         if (!vect[i])
             ret.push_back(i);
     }
@@ -87,6 +76,7 @@ static void print_u128_u(u128_t u128)
 }
 
 
+
 /* Question specific function and variable */
 
 /* Note to self
@@ -98,6 +88,31 @@ int main()
 {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    int n, m, k;
-    cin >> n >> m >> k;
+    int t, n, cnt = 0, size = 0, ans = 0;
+    cin >> t;
+
+    while (t--) {
+        map<int, int> m;
+        vector<int> group;
+
+        cin >> size;
+        while (size--) {
+            cin >> n;
+            m[n]++;
+        }
+
+        for (auto i:m)
+            group.push_back(i.second);
+        sort(group.begin(), group.end());
+
+        cnt = 0;
+        size = group.size();
+        for (int i = 0; i < size - 1; i++)
+            cnt += group[i];
+
+        ans = group[size - 1] - cnt;
+        if (ans < 0)
+            ans = abs(ans % 2);
+        cout << ans << "\n";
+    }
 }

@@ -94,10 +94,44 @@ static void print_u128_u(u128_t u128)
  * - Don't use a data structure when you don't need to
  */
 
+int dfs(int cur_node, int parent, vector<vector<int>> &adj_list, vector<int> &child_count)
+{
+    for (auto i:adj_list[cur_node]) {
+        if (i != parent)
+            child_count[cur_node] += dfs(i, cur_node, adj_list, child_count);
+    }
+    return (child_count[cur_node] + 1);
+}
+
 int main()
 {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    int n, m, k;
-    cin >> n >> m >> k;
+    int t;
+    string s;
+    char c = 'z';
+    bool b;
+
+    cin >> t;
+    while (t--) {
+        cin >> s;
+
+        b = 0;
+        c = 'z';
+
+        for (auto i:s)
+            c = min(c, i);
+
+        cout << c << " ";
+        for (auto i:s) {
+            if (i != c)
+                cout << i;
+            else {
+                if (!b)
+                    b = 1;
+                else cout << i;
+            }
+        }
+        cout << "\n";
+    }
 }

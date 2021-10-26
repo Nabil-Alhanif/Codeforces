@@ -98,6 +98,45 @@ int main()
 {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    int n, m, k;
-    cin >> n >> m >> k;
+    ll n, k, pos;
+
+    cin >> n >> k;
+
+    vector<ll> v(n + 1);
+    vector<ll> dp(n + 1);
+
+    for (int i = 1; i <= n; i++)
+        cin >> v[i];
+    sort(v.begin(), v.end());
+
+    /*
+    for (auto i:v)
+        cout << i << "\n";
+    */
+
+    ll l = 0, r = v[n] - v[1], mid, ans = -1;
+    while (l <= r) {
+        mid = ((l + r) / 2);
+        pos = 0;
+
+        for (int i = k; i <= n; i++) {
+            if (v[i] - v[dp[i - k] + 1] <= mid)
+                pos = i;
+            dp[i] = pos;
+        }
+
+        /*
+        cout << "\nDP: " << mid << "\n";
+        for (int i = 0; i <= n; i++)
+            cout << dp[i] << " ";
+        cout << "\n";
+        */
+
+        if (dp[n] == n) {
+            r = mid - 1;
+            ans = mid;
+        }
+        else l = mid + 1;
+    }
+    cout << ans << "\n";
 }

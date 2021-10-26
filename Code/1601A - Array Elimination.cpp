@@ -98,6 +98,50 @@ int main()
 {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    int n, m, k;
-    cin >> n >> m >> k;
+    ll t, n, gcd, tmp;
+
+    cin >> t;
+    while (t--) {
+        vector<ll> bits(32);
+
+        cin >> n;
+        vector<ll> arr(n);
+        for(auto &i:arr) {
+            cin >> i;
+            for (int j = 0; j < 32; j++)
+                if (i & (1 << j))
+                    bits[j]++;
+        }
+
+        gcd = -1;
+        for (auto i:bits) {
+            if (i) {
+                if (gcd == -1)
+                    gcd = i;
+                else gcd = __gcd(gcd, i);
+            }
+        }
+
+        vector<int> ans;
+
+        if (gcd == -1) {
+            for (int i = 1; i <= n; i++)
+                ans.push_back(i);
+        }
+        else {
+            for (int i = 1; i * i <= gcd; i++) {
+                if (gcd % i == 0) {
+                    ans.push_back(i);
+                    tmp = gcd / i;
+                    if (tmp != i)
+                        ans.push_back(tmp);
+                }
+            }
+        }
+
+        sort(ans.begin(), ans.end());
+        for (auto i:ans)
+            cout << i << " ";
+        cout << "\n";
+    }
 }

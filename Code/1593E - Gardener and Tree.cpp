@@ -98,6 +98,65 @@ int main()
 {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    int n, m, k;
-    cin >> n >> m >> k;
+    int t, n, k, u, v, x, ans;
+    cin >> t;
+
+    while (t--) {
+        ans = 0;
+        cin >> n >> k;
+
+        vector<vector<int>> adj_list(n);
+        vector<int> layer(n);
+        vector<int> con(n);
+
+        for (int i = 1; i < n; i++) {
+            cin >> u >> v;
+            --u, --v;
+            adj_list[u].push_back(v);
+            adj_list[v].push_back(u);
+            con[v]++;
+            con[u]++;
+        }
+
+        /*
+        for (int i = 0; i < n; i++) {
+            cout << i + 1 << ": ";
+            for (auto j:adj_list[i])
+                cout << j + 1 << " ";
+            cout << "\n";
+        }
+        */
+
+        // current node, depth
+        queue<pair<int, int>> q;
+        for (int i = 0; i < n; i++) {
+            if (adj_list[i].size() <= 1) { // This node is a leaf
+                q.push({i, 1});
+                layer[i] = 1;
+            }
+        }
+
+        while (!q.empty()) {
+            u = q.front().fi;
+            x = q.front().se;
+            q.pop();
+
+            for (auto i:adj_list[u]) {
+                if (layer[i] == 0) { // Not yet visited
+                    con[i]--;
+                    if (con[i] <= 1) {
+                        q.push({i, x + 1});
+                        layer[i] = x + 1;
+                    }
+                }
+            }
+        }
+
+        for (auto i:layer) {
+            if (i > k)
+                ans++;
+        }
+
+        cout << ans << "\n";
+    }
 }

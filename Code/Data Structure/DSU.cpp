@@ -7,71 +7,83 @@ const double PI = acos(-1);
 class DSU
 {
 private:
-    int dsuSize;
-    vector<vector<int>>child;
-    vector<vector<int>>adjList;
-    vector<int>parent;
-    vector<int>color;
-    vector<pair<int, int>> extras; // If the user try to connect already connected nodes, the data will be stored here
+    ll dsuSize;
+    vector<vector<ll>>child;
+    vector<vector<ll>>adjList;
+    vector<ll>parent;
+    vector<ll>edgeCount;
+    vector<pair<ll, ll>> extras; // If the user try to connect already connected nodes, the data will be stored here
 
 public:
-    DSU(int n)
+    DSU(ll n)
     {
-        dsuSize = n;
-        child.resize(n);
-        parent.resize(n);
-        color.resize(n);
-        adjList.resize(n);
-        for (int i=0; i<n; i++)
-        {
-            child[i].push_back(i);
-            parent[i] = i;
+        this->dsuSize = n;
+        this->child.resize(n);
+        this->parent.resize(n);
+        this->edgeCount.resize(n);
+        this->adjList.resize(n);
+
+        for (ll i=0; i<n; i++) {
+            this->child[i].push_back(i);
+            this->parent[i] = i;
         }
     }
 
-    inline int findSet(int n)
+    inline ll findSet(ll n)
     {
-        return parent[n];
+        if (this->parent[n] == n)
+            return n;
+        return (this->findSet(this->parent[n]));
     }
 
-    inline vector<pair<int, vector<int>>> findGroup()
+    inline ll getEdgeCount(ll n)
     {
-        vector<pair<int, vector<int>>> ret;
-        for (int i = 0; i < dsuSize; i++)
-        {
-            if (parent[i] == i)
-                ret.push_back({i, child[i]});
+        return (this->edgeCount[this->parent[n]]);
+    }
+
+    inline vector<pair<ll, vector<ll>>> findGroup()
+    {
+        vector<pair<ll, vector<ll>>> ret;
+        for (ll i = 0; i < dsuSize; i++) {
+            if (this->parent[i] == i)
+                ret.push_back({i, this->child[i]});
         }
 
         return ret;
     }
 
-    inline vector<pair<int, int>> getExtras()
+    inline vector<pair<ll, ll>> getExtras()
     {
-        return extras;
+        return (this->extras);
     }
 
-    inline void combine(int a, int b)
+    inline void combine(ll a, ll b)
     {
-        int ta = a, tb = b;
+        ll ta = a, tb = b;
 
-        adjList[a].push_back(b);
-        adjList[b].push_back(a);
-        a = findSet(a);
-        b = findSet(b);
+        this->adjList[a].push_back(b);
+        this->adjList[b].push_back(a);
+        a = this->findSet(a);
+        b = this->findSet(b);
 
-        if (a!=b)
-        {
-            if (child[a].size()<child[b].size())
+        if (a != b) {
+            if (this->child[a].size() < this->child[b].size())
                 swap(a, b);
-            while (!child[b].empty())
-            {
-                int cur = child[b].back();
-                child[b].pop_back();
-                parent[cur] = a;
-                child[a].push_back(cur);
+
+            this->edgeCount[a] += this->edgeCount[b];
+            this->edgeCount[a]++;
+            this->edgeCount[b] = this->edgeCount[a];
+
+            while (!this->child[b].empty()) { 
+                ll cur = this->child[b].back();
+                this->child[b].pop_back();
+                this->parent[cur] = a;
+                this->child[a].push_back(cur);
             }
         }
-        else extras.push_back({ta, tb});
+        else {
+            this->extras.push_back({ta, tb});
+            this->edgeCount[a]++;
+        }
     }
 };

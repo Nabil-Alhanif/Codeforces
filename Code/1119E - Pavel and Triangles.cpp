@@ -98,6 +98,29 @@ int main()
 {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    int n, m, k;
-    cin >> n >> m >> k;
+    ll n, ans = 0, tot = 0, tmp;
+    cin >> n;
+
+    vector<ll> tri(n);
+    for (auto &i:tri)
+        cin >> i;
+
+    for (auto &i:tri) {
+        tmp = (i >> 1);
+        if (tot >= tmp) {
+            ans += tmp;
+            tot -= tmp;
+            i -= (tmp * 2);
+        }
+        else {
+            ans += tot;
+            i -= (tot * 2);
+            tot = 0;
+        }
+
+        ans += (i / 3);
+        i %= 3;
+        tot += i;
+    }
+    cout << ans << "\n";
 }

@@ -98,6 +98,32 @@ int main()
 {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    int n, m, k;
-    cin >> n >> m >> k;
+    int t, a, b, c, maks;
+    cin >> t;
+
+    while (t--) {
+        cin >> a >> b >> c;
+        maks = max(a, max(b, c));
+
+        if (a == maks) {
+            if ((a == b) || (a == c))
+                cout << "1 ";
+            else cout << "0 ";
+        }
+        else cout << (maks - a + 1) << " ";
+
+        if (b == maks) {
+            if ((a == b) || (b == c))
+                cout << "1 ";
+            else cout << "0 ";
+        }
+        else cout << (maks - b + 1) << " ";
+
+        if (c == maks) {
+            if ((a == c) || (b == c))
+                cout << "1\n";
+            else cout << "0\n";
+        }
+        else cout << (maks - c + 1) << "\n";
+    }
 }

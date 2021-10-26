@@ -98,6 +98,79 @@ int main()
 {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    int n, m, k;
-    cin >> n >> m >> k;
+    int t, n, q, k, idx;
+    bool flag;
+
+    cin >> t;
+    while (t--) {
+        flag = 0;
+
+        cin >> n;
+        vector<int> cnt1(n + 1), cnt2(n + 1);
+
+        vector<int> arr(n);
+        for (auto &i:arr) {
+            cin >> i;
+            cnt1[i]++;
+        }
+
+        cin >> q;
+        vector<int> ans(q);
+
+        // k-th step, x-th element, idx
+        vector<pair<pair<int, int>, int>> query(q);
+        for (int i = 0; i < q; i++) {
+            cin >> query[i].fi.se >> query[i].fi.fi;
+            --query[i].fi.se;
+            query[i].se = i;
+        }
+        sort(query.begin(), query.end());
+
+        /*
+        cout << "\nQuery\n";
+        for (auto i:query)
+            cout << i.se << " " << i.fi << "\n";
+        */
+
+        idx = 0, k = 0;
+
+        while (!flag && idx < q) {
+            while (1) {
+                if (idx >= q)
+                    break;
+
+                if (k != query[idx].fi.fi)
+                    break;
+
+                ans[query[idx].se] = arr[query[idx].fi.se];
+                //cout << "Query: " << k << " " << query[idx].fi.se << "\n";
+                idx++;
+            }
+
+            for (auto &i:cnt2)
+                i = 0;
+
+            for (auto &i:arr) {
+                i = cnt1[i];
+                cnt2[i]++;
+            }
+            cnt1 = cnt2;
+
+            // Now let's check if we should break the loop
+            flag = 1;
+            for (auto i:arr) {
+                //cout << i << " ";
+                flag &= (i == cnt1[i]);
+            }
+            //cout << "\n";
+
+            k++;
+        }
+
+        for (idx; idx < q; idx++)
+            ans[query[idx].se] = arr[query[idx].fi.se];
+
+        for (int i = 0; i < q; i++)
+            cout << ans[i] << "\n";
+    }
 }

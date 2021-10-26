@@ -6,9 +6,6 @@
 #define P10_UINT64 10000000000000000000ULL   /* 19 zeroes */
 #define E10_UINT64 19
 
-#define fi first
-#define se second
-
 using namespace std;
 using namespace __gnu_pbds;
 
@@ -87,6 +84,7 @@ static void print_u128_u(u128_t u128)
 }
 
 
+
 /* Question specific function and variable */
 
 /* Note to self
@@ -98,6 +96,31 @@ int main()
 {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    int n, m, k;
-    cin >> n >> m >> k;
+    int n, z;
+    cin >> n >> z;
+
+    vector<int> x(n);
+    for (auto &i:x)
+        cin >> i;
+    sort(x.begin(), x.end());
+
+    int lim = n / 2, l, lm, rm, mm, ans = 0;
+    for (int r = lim; r < n; r++) {
+
+        // Binser
+        l = -1, lm = l + 1, rm = lim - 1;
+        while (lm <= rm) {
+            mm = (lm + rm) / 2;
+            if (x[r] - x[mm] >= z) {
+                l = mm;
+                lm = mm + 1;
+            }
+            else rm = mm - 1;
+        }
+
+        //cout << l << " " << r << "\n";
+        if (l >= ans)
+            ans++;
+    }
+    cout << ans << "\n";
 }

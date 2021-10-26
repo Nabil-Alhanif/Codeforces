@@ -6,9 +6,6 @@
 #define P10_UINT64 10000000000000000000ULL   /* 19 zeroes */
 #define E10_UINT64 19
 
-#define fi first
-#define se second
-
 using namespace std;
 using namespace __gnu_pbds;
 
@@ -87,6 +84,7 @@ static void print_u128_u(u128_t u128)
 }
 
 
+
 /* Question specific function and variable */
 
 /* Note to self
@@ -94,10 +92,46 @@ static void print_u128_u(u128_t u128)
  * - Don't use a data structure when you don't need to
  */
 
+bool check(int n, int lim, bool state, vector<int> v)
+{
+    int cnt = 0;
+    for (auto i:v) {
+        if (!state) {
+            cnt++;
+            state ^= 1;
+        }
+        else {
+            if (i <= n) {
+                cnt++;
+                state ^= 1;
+            }
+        }
+    }
+    //cout << cnt << " " << n << " " << state << " cns\n";
+
+    return (cnt >= lim);
+}
+
 int main()
 {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    int n, m, k;
-    cin >> n >> m >> k;
+    int k, n, l, r, mid, ans;
+    cin >> n >> k;
+
+    vector<int> a(n);
+    for (auto &i:a)
+        cin >> i;
+
+    l = 1, r = 1e9;
+    while (l <= r) {
+        mid = (l + r) / 2;
+        //cout << "mid " << mid << "\n";
+        if (check(mid, k, 0, a) || check(mid, k, 1, a)) {
+            ans = mid;
+            r = mid - 1;
+        }
+        else l = mid + 1;
+    }
+    cout << ans << "\n";
 }

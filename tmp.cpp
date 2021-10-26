@@ -98,6 +98,70 @@ int main()
 {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    int n, m, k;
-    cin >> n >> m >> k;
+    int tc, n, t, m, tt, ct, cnt = 0;
+    bool pos;
+    string p;
+
+    cin >> tc;
+
+    queue<pair<int, int>> kiri, kanan;
+
+    while (tc--) {
+        cin >> n >> t >> m;
+        vector<int> ans(m);
+
+        for (int i = 0; i < m; i++) {
+            cin >> tt >> p;
+            if (p == "left")
+                kiri.push({i, tt});
+            else kanan.push({i, tt});
+        }
+
+        ct = 0;
+        pos = 0;
+        cnt = 0;
+
+        while (cnt < m) {
+            if (!pos) {
+                if (!kiri.empty()) {
+                    ct = max(ct, kiri.front().se);
+                    for (int i = 0; (i < n) && (!kiri.empty()); i++) {
+                        if (kiri.front().se > ct)
+                            break;
+
+                        ans[kiri.front().fi] = ct + t;
+                        kiri.pop();
+                        cnt++;
+                    }
+                }
+                else if (!kanan.empty())
+                    ct = max(ct, kanan.front().se);
+                ct += t;
+                pos ^= 1;
+            }
+            else {
+                if (!kanan.empty()) {
+                    ct = max(ct, kanan.front().se);
+                    for (int i = 0; (i < n) && (!kanan.empty()); i++) {
+                        if (kanan.front().se > ct)
+                            break;
+
+                        ans[kanan.front().fi] = ct + t;
+                        kanan.pop();
+                        cnt++;
+                    }
+                }
+                else if (!kiri.empty())
+                    ct = max(ct, kiri.front().se);
+                ct += t;
+                pos ^= 1;
+            }
+        }
+
+        for (auto i:ans)
+            cout << i << "\n";
+
+        if (tc)
+            cout << "\n";
+    }
 }
