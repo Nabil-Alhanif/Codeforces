@@ -16,8 +16,6 @@ typedef tree<int, null_type, less<int>, rb_tree_tag,
             tree_order_statistics_node_update> indexed_set;
 
 typedef int_fast64_t ll;
-typedef __uint128_t u128_t;
-typedef __int128_t i128_t;
 
 const ll MOD = 1e9 + 7, INF = 1e18;
 const double PI = acos(-1);
@@ -70,22 +68,6 @@ inline vector<int> sieve(vector<bool> &vect)
     return ret;
 }
 
-static void print_u128_u(u128_t u128)
-{
-    if (u128 > UINT64_MAX)
-    {
-        u128_t leading  = u128 / P10_UINT64;
-        uint_fast64_t  trailing = u128 % P10_UINT64;
-        print_u128_u(leading);
-        cout << trailing;
-    }
-    else
-    {
-        uint_fast64_t u64 = u128;
-        cout << u64;
-    }
-}
-
 
 /* Question specific function and variable */
 
@@ -98,51 +80,26 @@ int main()
 {
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    ll t, n, k, l, tide, cnt;
-    bool down, flag;
+    int t, n, k, tot;
 
     cin >> t;
     while (t--) {
-        cnt = 0;
-        cin >> n >> k >> l;
+        tot = 0;
+        cin >> n >> k;
 
-        vector<ll> depth(n + 2);
-        vector<ll> safe;
-
-        safe.push_back(0);
-        for (int i = 1; i <= n; i++) {
-            cin >> depth[i];
-            if (depth[i] + k <= l)
-                safe.push_back(i);
-            cnt++;
+        vector<int> mice(k);
+        for (auto &i:mice) {
+            cin >> i;
+            i = n - i;
         }
-        safe.push_back(n + 1);
+        sort(mice.begin(), mice.end());
 
-        flag = 1;
-        for (int i = 0; i < cnt; i++) {
-            tide = k;
-            down = 1;
-            for (int j = safe[i] + 1; j < safe[i + 1]; j++) {
-                if (down)
-                    tide--;
-                else tide++;
-
-                //cout << tide << " " << depth[j] << " td\n";
-                if (down)
-                    tide -= (depth[j] + tide - l);
-
-                if (depth[j] + tide > l) {
-                    flag = 0;
-                    break;
-                }
-
-                if (tide == 0)
-                    down = 0;
-            }
+        int i = 0;
+        for (i = 0; i < k; i++) {
+            tot += mice[i];
+            if (tot >= n)
+                break;
         }
-
-        if (flag)
-            cout << "Yes\n";
-        else cout << "No\n";
+        cout << i << "\n";
     }
 }

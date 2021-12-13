@@ -13,14 +13,43 @@ typedef tree<int, null_type, less<int>, rb_tree_tag,
             tree_order_statistics_node_update> indexed_set;
 
 typedef int_fast64_t ll;
+typedef uint_fast64_t ull;
 typedef __uint128_t u128_t;
 typedef __int128_t i128_t;
 
 const ll MOD = 1e9 + 7, INF = 1e18;
 const double PI = acos(-1);
 
-template <class type>
-inline void printVect2D(vector<vector<type>> &vect)
+template <class T>
+inline T ceil(T a, T b) // Get ceil of a / b
+{
+    if (b > 0)
+        return ((a + b - 1) / b);
+    return 0;
+}
+ 
+template <class T>
+inline T arithmeticSum(T a)
+{
+    return (((a * a) + a) / 2);
+}
+ 
+template <class T>
+inline T arithmeticSum(T a, T b)
+{
+    return arithmeticSum(a) - arithmeticSum(b);
+}
+ 
+template <class T>
+inline void printVect1D(vector<T> &vect)
+{
+    for (auto i:vect)
+        cout << i << " ";
+    cout << "\n";
+}
+ 
+template <class T>
+inline void printVect2D(vector<vector<T>> &vect)
 {
     for (auto i:vect) {
         for (auto j:i)
@@ -29,52 +58,35 @@ inline void printVect2D(vector<vector<type>> &vect)
     }
     cout << "\n";
 }
-
-inline void sieve(vector<bool> &vect, bool is_one_prime)
-{
-    vect[0] = 1;
-    if (!is_one_prime)
-        vect[1] = 1;
-
-    ll lim = vect.size() - 1;
  
-    for (ll i = 2; i * i <= lim; i++) {
-        if (!vect[i]) {
-            for (ll j = i * i; j <= lim; j += i)
-                vect[j] = 1;
-        }
-    }
-}
-
-inline vector<int> sieve(vector<bool> &vect)
+template <class T>
+inline void resizeVect1D(vector<T> &vect, int n)
 {
-    vector<int> ret;
-
-    ll size = vect.size();
-    for (ll i = 0; i <= size; i++) {
-        if (!vect[i])
-            ret.push_back(i);
-    }
-
-    return ret;
+    vect.resize(n);
 }
-
+ 
+template <class T>
+inline void resizeVect2D(vector<vector<T>> &vect, int n, int m)
+{
+    vect.resize(n);
+    fill(vect.begin(), vect.end(), vector<T>(m));
+}
+ 
 static void print_u128_u(u128_t u128)
 {
     if (u128 > UINT64_MAX)
     {
         u128_t leading  = u128 / P10_UINT64;
-        uint_fast64_t  trailing = u128 % P10_UINT64;
+        ull trailing = u128 % P10_UINT64;
         print_u128_u(leading);
         cout << trailing;
     }
     else
     {
-        uint_fast64_t u64 = u128;
+        ull u64 = u128;
         cout << u64;
     }
 }
-
 
 
 /* Question specific function and variable */
